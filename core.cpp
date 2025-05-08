@@ -1,5 +1,6 @@
 #include <iostream>
 #include <windows.h>
+#include <fstream>
 
 class Player {
   public:
@@ -14,10 +15,17 @@ class Player {
     std::cout << "you fighted a goblin and you took 25 demage\nand gained 5 golds\n\n";
     if (health <= 0) {
       std::cout << "You died good luck next time";
+      statReset();
+      fileSave();
       exit(0);
     }
     std::cout << "\n";
     system("pause");
+  }
+  void statReset() {
+    health = 100;
+    gold = 0;
+    heals = 1;
   }
   void showStats() {
     system("cls");
@@ -52,6 +60,18 @@ class Player {
     health += 25;
     }
   }
+  void fileLoad() {
+    std::ifstream inputFile("C:/save.txt");
+    inputFile >> health >> gold >> heals;
+    inputFile.close();
+  }
+  void fileSave() {
+    std::cout << "Game has been saved!\n\n";
+    system("pause");
+    std::ofstream outputFile("C:/save.txt");
+    outputFile << health << " " << gold << " " << heals;
+    outputFile.close();
+  }
   
 };
 
@@ -60,6 +80,7 @@ int main() {
   using std::cin;
 
   Player p1;
+  p1.fileLoad();
 
   int choice;
 
@@ -91,6 +112,7 @@ int main() {
     }
   }
   else if (choice == 0) {
+    p1.fileSave();
     break;
   }
   else {
